@@ -2,11 +2,11 @@
 # author Yoshiya Ito <myon53@gamil.com>
 
 - hosts: localhost
-    connection: local
-    gather_gacts: no
-    sudo: no
-    vars:
-        homebew_taps:
+  connection: local
+  gather_facts: no
+  sudo: no
+  vars:
+        homebrew_taps:
             - caskroom/cask
             - homebrew/php
         homebrew_packages:
@@ -61,22 +61,21 @@
             - { name: vagrant }
             - { name: virtualbox }
             - { name: atom }
-            - { name: sublime}
-    tasks:
+  tasks:
         # tap home brew
-        - name: tap homebrew repository
-          homebrew_tap: tap={{ item }} state=present
-          with_items: homebrew_taps
+        #- name: tap homebrew repository
+        #  homebrew_tap: tap={{ item }} state=present
+        #  with_items: homebrew_taps
 
         # brew install
-        - name: install brew pacages...
-          homebrew: name={{ item.name }} install_options={{ item.options|default() }}
-          with_items: homebrew_packages
+        #- name: install brew pacages...
+        #  homebrew: name={{ item.name }} install_options={{ item.options|default() }}
+        #  with_items: homebrew_packages
 
         # brew cask install
-        - name: install brew cask packages...
-          homebrew_cask: name={{ item.name }} state={{ item.state|default('installed') }}
-          with_items: homebrew_cask_packages
+        #- name: install brew cask packages...
+        #  homebrew_cask: name={{ item.name }} state={{ item.state|default('installed') }}
+        #  with_items: homebrew_cask_packages
 
         # vim-neobundle
         - name: install neobundle...
@@ -89,7 +88,7 @@
           args:
             creates: ~/.oh-my-zsh/
 
-    handlers:
+  handlers:
         - name: install neobundle
           command: git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 
