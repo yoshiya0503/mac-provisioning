@@ -1,0 +1,10 @@
+# My Ansible Play Book for Mac Client
+# author Yoshiya Ito <myon53@gamil.com>
+
+- hosts: localhost
+    connection: local
+    gather_gacts: no
+    sudo: no
+    vars:
+        homebew_taps:
+          - caskroom/cask
