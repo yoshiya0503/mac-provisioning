@@ -7,4 +7,89 @@
     sudo: no
     vars:
         homebew_taps:
-          - caskroom/cask
+            - caskroom/cask
+            - homebrew/php
+        homebrew_packages:
+            - { name: readline }
+            - { name: ansible }
+
+            # programming python
+            - { name: python }
+            - { name: python3 }
+            # programming ruby
+            - { name: rbenv }
+            - { name: ruby-build }
+
+            # other
+            - { name: nodebrew }
+            - { name: lua }
+            - { name: perl }
+            - { name: php56 }
+            - { name: composer }
+
+            # database
+            - { name: mysql }
+            - { name: sqlite }
+            - { name: redis }
+            - { name: mongodb }
+            - { name: rethinkdb }
+
+            # other native package
+            - { name: git }
+            - { name: hub }
+            - { name: ag}
+            - { name: zsh }
+            - { name: zsh-completions }
+            - { name: ctags }
+            - { name: lua }
+            - { name: tmux }
+            - { name: tree }
+            - { name: source-highlight }
+            - { name: unrar }
+            - { name: wget }
+            - { name: curl }
+            - { name: imagemagick }
+            - { name: brew-cask }
+            - { name: vim, install_options: devel with-lua with-python3 with-python with-ruby}
+        homebrew_cask_packages:
+            - { name: iterm2 }
+            - { name: google-chrome }
+            - { name: java }
+            - { name: skype }
+            - { name: slack }
+            - { name: evernote }
+            - { name: vagrant }
+            - { name: virtualbox }
+            - { name: atom }
+            - { name: sublime}
+    tasks:
+        # tap home brew
+        - name: tap homebrew repository
+          homebrew_tap: tap={{ item }} state=present
+          with_items: homebrew_taps
+
+        # brew install
+        - name: install brew pacages...
+          homebrew: name={{ item.name }} install_options={{ item.options|default() }}
+          with_items: homebrew_packages
+
+        # brew cask install
+        - name: install brew cask packages...
+          homebrew_cask: name={{ item.name }} state={{ item.state|default('installed') }}
+          with_items: homebrew_cask_packages
+
+        # vim-neobundle
+        - name: install neobundle...
+          file: path=~/.vim/bundle state=directory
+          notify: install neobundle
+
+        # oh-my-zsh
+        - name: install oh-my-zsh...
+          shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+          args:
+            creates: ~/.oh-my-zsh/
+
+    handlers:
+        - name: install neobundle
+          command: git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+
